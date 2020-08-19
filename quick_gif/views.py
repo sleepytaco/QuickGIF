@@ -56,7 +56,7 @@ def quick_gif(request):
                 form = QuickGIFsForm(request.POST, files=request.FILES.copy())
                 return render(request, "quick_gif/quick_gif.html", {'form': form, 'img_upload_error': 'Please upload images with acceptable file formats!'})
 
-            gif.gif_file = os.path.join('quick_gifs', key, str(gif.id) + '.gif')
+            gif.gif_file = os.path.join('quick_gifs', gif.key + '.gif')
             gif.save()
 
             file_size = gif.gif_file.size / (10 ** 6)
@@ -79,7 +79,7 @@ def view_quick_gif(request, key):
 
     try:
         gif = QuickGIFs.objects.get(key=key)
-        if not gif.sharable:  
+        if not gif.sharable:
             return render(request, 'quick_gif/view_quick_gif.html', {'error': 'You sneaky bastard ;)'})
         elif gif.delete_if_expired():  # if gif is expired, the model class deletes it
             return render(request, 'quick_gif/view_quick_gif.html', {'error': 'Uh-oh! Looks like this GIF link expired :('})
@@ -98,7 +98,7 @@ def generate_gif_link(request):
         gif.sharable = True
         gif.save()
 
-        sharable_link = f'http://127.0.0.1:8000/permalink/{gif.key}'
+        sharable_link = f'https://bakaabu1.pythonanywhere.com/permalink/{gif.key}'
 
     ctx = {'gif_link': sharable_link}
 
