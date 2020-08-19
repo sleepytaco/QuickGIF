@@ -14,20 +14,20 @@ class QuickGIFs(models.Model):
     sharable = models.BooleanField(default=False)
 
     def delete_gif(self):
-        shutil.rmtree(os.path.join(settings.MEDIA_ROOT, 'quick_gifs', f'{self.id}.gif'))
+        os.remove(os.path.join(settings.MEDIA_ROOT, 'quick_gifs', f'{self.key}.gif'))
         QuickGIFs.objects.get(key=self.key).delete()  # delete the related object in the model
 
     def delete_if_expired(self):
         now = datetime.datetime.now(pytz.utc)  # make a timezone "aware" datetime object so that it can be added to the made_on attribute
-        if self.made_on + datetime.timedelta(minutes=10) < now:  # if the event date has past
+        if self.made_on + datetime.timedelta(hours=1) < now:  # if the event date has past
             self.delete_gif()
             return True
         return False
 
     def expires_in(self):
         now = datetime.datetime.now(pytz.utc)
-        if self.made_on + datetime.timedelta(minutes=10) > now:  # if the event date has not past
-            s = ((self.made_on + datetime.timedelta(minutes=10)) - now).seconds
+        if self.made_on + datetime.timedelta(hours=1) > now:  # if the event date has not past
+            s = ((self.made_on + datetime.timedelta(hours=1)) - now).seconds
             hours, remainder = divmod(s, 3600)
             minutes, seconds = divmod(remainder, 60)
             # return '{:02} hours {:02} minutes and {:02} seconds'.format(int(hours), int(minutes), int(seconds))
