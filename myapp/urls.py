@@ -18,10 +18,12 @@ from django.urls import path
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
+from quick_gif.views import quick_gif
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url("", include("quick_gif.urls")),
+    url("", quick_gif, name="quick_gif"),
+    #url("", include("quick_gif.urls")),
 ]
 
 if settings.DEBUG:
