@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Open+Sans&display=swap" rel="stylesheet"> 
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Open+Sans&display=swap" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
@@ -20,7 +20,7 @@
 
         .other {background-color: #e7e7e7; color: #000000;} /* Gray */
     </style>
-    
+
     <title>QuickGIF</title>
   </head>
 
@@ -28,185 +28,183 @@
 <body style="background:#f17c2f; font-family: 'Open Sans', sans-serif;">
     <div class="container-fluid pt-3">
         <center>
-            <a class="navbar-brand" href="" style="font-family: 'Fredoka One', cursive;"><h1>QuickGIF</h1></a>
+            <a href="" style="font-family: 'Fredoka One', cursive;"><h1 style="color: rgb(255, 255, 255);">QuickGIF</h1></a>
         </center>
-    <div class="jumbotron card card-block">
-        <h2>
-            Quick Gif Maker
-        </h2>
-        <p>
-            Already have a bunch of pictures and want to make a gif? Welcome.
-        </p>
-        <p>
-            <a id="modal-215558" href="#modal-container-215558" data-toggle="modal">Information on how your images will be handled.</a>
-            <div class="modal fade" id="modal-container-215558" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">
-                                About QuickGIF Maker
-                            </h5> 
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>All uploaded images will be deleted after 24 hours.</p>
-                            <p>Corrupted files will be ignored.</p>
-                            <p>Tip: Rename your images with numbers corresponding to the order you want the images to be played out in the GIF.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                O_o
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </p>
-    </div>
+        <br>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-5">  <!-- <div class="mx-auto col-sm-6"> -->
-                {% if img_upload_error %}
-                <div class="alert alert-dismissable alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                        ×
-                    </button>
-                    <h5>
-                        {{img_upload_error}}
-                    </h5>
+        <div class="container-fluid">
+            <div class="row">
+                {% if not sharable_link %}
+                <div class="col-sm">
                 </div>
                 {% endif %}
-                <div class="card">
-                    <div class="card-body">
-                        <form enctype="multipart/form-data" method="post" action="{% url 'quick_gif' %}">
-                            {% csrf_token %}
-                            <div class="form-group row">
-                                <div class="col-lg-12">
-                                    {{ form.gif_file|as_crispy_field }} 
-                                    <small id="imagesHelp1" class="form-text text-muted">Acceptable image formats are .jpg and .png. Files limit: 100.</small>
-                                    <script type="text/javascript">
-                                        var d = document.getElementById("id_gif_file");
-                                        d.className += " form-control";
-                                        d.parentNode.append(document.getElementById("imagesHelp1"));
-                                    </script>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-lg-4">
-                                    {{ form.gif_speed|as_crispy_field }}
-                                    <small id="imagesHelp2" class="form-text text-muted">Max 100s; Min 0s</small>
-                                    <script type="text/javascript">
-                                        var d = document.getElementById("id_gif_speed");
-                                        d.parentNode.append(document.getElementById("imagesHelp2"));
-                                    </script>
-                                </div>
-                                
-                                <div class="col-lg-4">
-                                    {{ form.gif_width|as_crispy_field }}
-                                    <small id="imagesHelp3" class="form-text text-muted">Max 1000px; Min 100px</small>
-                                    <script type="text/javascript">
-                                        var d = document.getElementById("id_gif_width");
-                                        d.parentNode.append(document.getElementById("imagesHelp3"));
-                                    </script>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    {{ form.gif_height|as_crispy_field }}
-                                    <small id="imagesHelp4" class="form-text text-muted">Max 1000px; Min 100px</small>
-                                    <script type="text/javascript">
-                                        var d = document.getElementById("id_gif_height");
-                                        d.parentNode.append(document.getElementById("imagesHelp4"));
-
-                                        {% if gif_height %}
-                                        d.setAttribute("value", "{{gif_height}}");
-                                        {% endif %}
-                                    </script>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row col-lg-12 d-flex justify-content-center">
-                                {{ form.set_height_from_width|as_crispy_field }}
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-lg-12 d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary mr-1" id="make-gif">Make GIF!</button>
-                                </div>
-                            </div>
-                        </form>
-                        <script type="text/javascript">
-                            document.getElementById("make-gif").onclick = function() {
-                                //alert("Making gif");
-                            };
-                        </script>
+                <div {% if sharable_link %} class="col-sm-5" {% else %} class="col-sm-5" {% endif %}>
+                    {% if img_upload_error %}
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                            ×
+                        </button>
+                        <h5>
+                            {{img_upload_error}}
+                        </h5>
                     </div>
-                </div>
-                <br>
-                {% if sharable_link %}
-                <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
-                <div class="card bg-dark text-white rounded">
-                    <div class="card-body">
-                        <center id='link-generate'>
-                            <input class="btn btn-success copy-btn" type="button" id="generate-link" name="{{gif.id}}" value="Generate GIF Link" />
-                        </center>
-                        <center id="link-generating" style="display:none;">
-                            <span>Generating link...</span>
-                        </center>
-                        <center id="link-generated" style="display:none;">
-                            <h3>Share your GIF!</h3>
-                            <h6 class="mb-4">Link expires in 1 hour</h6>
-                            
-                            <span class="label other mr-1" id="copy-link"></span>
+                    {% endif %}
+                    <div class="card">
+                        <div class="card-body">
+                            <form enctype="multipart/form-data" method="post" action="{% url 'quick_gif' %}">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        {{ form.gif_file|as_crispy_field }}
+                                        <small id="imagesHelp1" class="form-text text-muted">Acceptable image formats are .jpg and .png. Files limit: 100.</small>
+                                        <script type="text/javascript">
+                                            var d = document.getElementById("id_gif_file");
+                                            d.className += " form-control";
+                                            d.parentNode.append(document.getElementById("imagesHelp1"));
+                                        </script>
+                                    </div>
+                                </div>
 
-                            <button class="btn btn-success copy-btn" data-clipboard-target="#copy-link"><i class="far fa-copy"></i></button>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        {{ form.gif_speed|as_crispy_field }}
+                                        <small id="imagesHelp2" class="form-text text-muted">Max 100s; Min 0s</small>
+                                        <script type="text/javascript">
+                                            var d = document.getElementById("id_gif_speed");
+                                            d.parentNode.append(document.getElementById("imagesHelp2"));
+                                        </script>
+                                    </div>
 
-                            <a href="" class="btn btn-info" target="_blank" id="share_link"><i class="fas fa-external-link-alt"></i></a>
-                        </center>
+                                    <div class="col-lg-4">
+                                        {{ form.gif_width|as_crispy_field }}
+                                        <small id="imagesHelp3" class="form-text text-muted">Max 1000px; Min 100px</small>
+                                        <script type="text/javascript">
+                                            var d = document.getElementById("id_gif_width");
+                                            d.parentNode.append(document.getElementById("imagesHelp3"));
+                                        </script>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        {{ form.gif_height|as_crispy_field }}
+                                        <small id="imagesHelp4" class="form-text text-muted">Max 1000px; Min 100px</small>
+                                        <script type="text/javascript">
+                                            var d = document.getElementById("id_gif_height");
+                                            d.parentNode.append(document.getElementById("imagesHelp4"));
+
+                                            {% if gif_height %}
+                                            d.setAttribute("value", "{{gif_height}}");
+                                            {% endif %}
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row col-lg-12 d-flex justify-content-center">
+                                    {{ form.set_height_from_width|as_crispy_field }}
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-lg-12 d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary mr-1" id="make-gif">Make GIF!</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <script type="text/javascript">
+                                document.getElementById("make-gif").onclick = function() {
+                                    //alert("Making gif");
+                                };
+                            </script>
+                        </div>
                     </div>
-                </div>
-                <br>
-                <script>
-                    $(document).ready(
-                        function() {
-                            $('#generate-link').click(function(){
-                                $('#link-generate').hide();
-                                $('#link-generating').show();
-                                $.ajax({
-                                   url: "{% url 'generate_gif_link' %}",
-                                   type: "POST",
-                                   data: {'maze': $(this).attr('name'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
-                                   dataType: "json",
-                                   success: function(data) {
-                                        $('#link-generating').hide();
-                                        document.getElementById("copy-link").innerHTML = data.gif_link;
-                                        document.getElementById("share_link").setAttribute('href', data.gif_link);
-                                        $('#link-generated').show();
-                                        document.getElementById("link-generated").scrollIntoView();  
-                                    },
-                                    failure: function(data) {
-                                        document.getElementById('link-generating').innerHTML = "Unable to generate link";
-                                    }
-                                }); 
+                    <br>
+                    {% if sharable_link %}
+                    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+                    <div class="card bg-dark text-white rounded">
+                        <div class="card-body">
+                            <center id='link-generate'>
+                                <input class="btn btn-success copy-btn" type="button" id="generate-link" name="{{gif.id}}" value="Generate GIF Link" />
+                            </center>
+                            <center id="link-generating" style="display:none;">
+                                <span>Generating link...</span>
+                            </center>
+                            <center id="link-generated" style="display:none;">
+                                <h3>Share your GIF!</h3>
+                                <h6 class="mb-4">Link expires in 1 hour</h6>
+
+                                <span class="label other mr-1" id="copy-link"></span>
+
+                                <button class="btn btn-success copy-btn" data-clipboard-target="#copy-link"><i class="far fa-copy"></i></button>
+
+                                <a href="" class="btn btn-info" target="_blank" id="share_link"><i class="fas fa-external-link-alt"></i></a>
+                            </center>
+                        </div>
+                    </div>
+                    <br>
+                    <script>
+                        $(document).ready(
+                            function() {
+                                $('#generate-link').click(function(){
+                                    $('#link-generate').hide();
+                                    $('#link-generating').show();
+                                    $.ajax({
+                                       url: "{% url 'generate_gif_link' %}",
+                                       type: "POST",
+                                       data: {'maze': $(this).attr('name'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                                       dataType: "json",
+                                       success: function(data) {
+                                            $('#link-generating').hide();
+                                            document.getElementById("copy-link").innerHTML = data.gif_link;
+                                            document.getElementById("share_link").setAttribute('href', data.gif_link);
+                                            $('#link-generated').show();
+                                            document.getElementById("link-generated").scrollIntoView();
+                                        },
+                                        failure: function(data) {
+                                            document.getElementById('link-generating').innerHTML = "Unable to generate link";
+                                        }
+                                    });
+                                });
                             });
-                        });
-                </script>
-                {% endif %}
-            </div>
+                    </script>
+                    {% endif %}
+                    <div class="d-flex justify-content-center">
+                        <h6 style="font-family: 'Fredoka One', cursive;">Made with <span style="color: #e25555;">&hearts;</span> in Django - <span><a href="https://github.com/sleepytaco/QuickGIF" style="color: rgb(0, 0, 0);" target="_blank"><i class="fab fa-github"></i></a> - <a id="modal-215558" href="#modal-container-215558" data-toggle="modal">About</a></span></h6>
+                        <div class="modal fade" id="modal-container-215558" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="myModalLabel">
+                                            About QuickGIF
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>All uploaded images will not be saved on the server and will only be used to create the GIF. However, created GIFs will be saved on the server and will be deleted after 24 hours.</p>
+                                        <p>Corrupted files will be ignored.</p>
+                                        <p>Tip: Rename your images with numbers corresponding to the order you want the images to be played out in the GIF.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                            O_o
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
 
-            <div class="col-sm-7"> 
                 {% if sharable_link %}
+                <div class="col-sm-7">
                     <div class="container">
-                        <center> 
+                        <center>
                             <img class="img-thumbnail" src="{{ gif.gif_file.url }}" id="gif_image">
                         </center>
                         <script type="text/javascript">
-                            var clipboard = new ClipboardJS('.copy-btn'); 
+                            var clipboard = new ClipboardJS('.copy-btn');
                             var elmnt = document.getElementById("gif_image");
-                            elmnt.scrollIntoView();  
+                            elmnt.scrollIntoView();
                          </script>
                     </div>
 
@@ -227,10 +225,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 {% else %}
-                <div style="width:100%;height:0;padding-bottom:100%;position:relative;"><iframe src="https://giphy.com/embed/8FDhJzbSLQvhmDVeTW" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/8FDhJzbSLQvhmDVeTW" style="font-family: 'Fredoka One', cursive;">via GIPHY</a></p>
+                <div class="col-sm">
+                </div>
                 {% endif %}
+            </div>
         </div>
+
     </div>
 
     <script type="text/javascript">
@@ -251,7 +253,7 @@
             }
         }
     </script>
-    
+
 <script src="https://kit.fontawesome.com/5baac7e9b7.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 
